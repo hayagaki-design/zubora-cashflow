@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f7f3ea" />
+    <title>ずぼらCF 分析</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app analyzer">
+      <section class="top-panel" aria-labelledby="app-title">
+        <div>
+          <p class="eyebrow">CSVを読み込んで見る</p>
+          <h1 id="app-title">PC分析</h1>
+        </div>
+        <a class="export-button" href="index.html">入力へ</a>
+      </section>
+
+      <section class="upload-panel">
+        <h2>スマホで書き出したCSV</h2>
+        <input id="csvInput" type="file" accept=".csv,text/csv" />
+      </section>
+
+      <section class="summary wide-summary" aria-label="集計サマリー">
+        <article class="metric">
+          <span>収入</span>
+          <strong id="analysisIncome">¥0</strong>
+        </article>
+        <article class="metric">
+          <span>支出</span>
+          <strong id="analysisExpense">¥0</strong>
+        </article>
+        <article class="metric">
+          <span>めぐさんへ</span>
+          <strong id="analysisMeg">¥0</strong>
+        </article>
+        <article class="metric main-metric">
+          <span>差し引き</span>
+          <strong id="analysisNet">¥0</strong>
+        </article>
+      </section>
+
+      <section class="analysis-grid">
+        <article class="insight">
+          <h2>カテゴリ別</h2>
+          <table class="analysis-table">
+            <thead>
+              <tr>
+                <th>カテゴリ</th>
+                <th>金額</th>
+              </tr>
+            </thead>
+            <tbody id="categoryTable">
+              <tr><td colspan="2">CSVを選んでください</td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="insight">
+          <h2>月別</h2>
+          <table class="analysis-table">
+            <thead>
+              <tr>
+                <th>月</th>
+                <th>差し引き</th>
+              </tr>
+            </thead>
+            <tbody id="monthTable">
+              <tr><td colspan="2">CSVを選んでください</td></tr>
+            </tbody>
+          </table>
+        </article>
+      </section>
+    </main>
+
+    <script src="analyze.js"></script>
+  </body>
+</html>

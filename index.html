@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f7f3ea" />
+    <title>ずぼらキャッシュフロー</title>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="top-panel" aria-labelledby="app-title">
+        <div>
+          <p class="eyebrow">今月のキャッシュフロー</p>
+          <h1 id="app-title">ずぼらCF</h1>
+        </div>
+        <button class="export-button" id="exportButton" type="button" aria-label="CSVを書き出す" title="CSVを書き出す">
+          <span>CSV</span>
+          <strong>↓</strong>
+        </button>
+      </section>
+
+      <section class="summary" aria-label="月次サマリー">
+        <article class="metric main-metric">
+          <span>今月の残り</span>
+          <strong id="netAmount">¥0</strong>
+        </article>
+        <article class="metric">
+          <span>入金</span>
+          <strong id="incomeAmount">¥0</strong>
+        </article>
+        <article class="metric">
+          <span>出金</span>
+          <strong id="expenseAmount">¥0</strong>
+        </article>
+        <article class="metric">
+          <span>めぐさんへ</span>
+          <strong id="megAmount">¥0</strong>
+        </article>
+      </section>
+
+      <form class="entry-form" id="entryForm">
+        <div class="toggle" role="group" aria-label="種類">
+          <input id="expense" name="type" type="radio" value="expense" checked />
+          <label for="expense">支出</label>
+          <input id="income" name="type" type="radio" value="income" />
+          <label for="income">収入</label>
+          <input id="meg" name="type" type="radio" value="meg" />
+          <label for="meg">めぐさんへ</label>
+        </div>
+
+        <label class="amount-field">
+          <span>金額</span>
+          <input id="amountInput" inputmode="numeric" autocomplete="off" placeholder="1200" required />
+        </label>
+
+        <div class="chips" id="categoryChips" aria-label="カテゴリ"></div>
+
+        <details class="optional">
+          <summary>日付・メモ</summary>
+          <div class="optional-grid">
+            <label>
+              <span>日付</span>
+              <input id="dateInput" type="date" />
+            </label>
+            <label>
+              <span>メモ</span>
+              <input id="memoInput" autocomplete="off" placeholder="なくてもOK" />
+            </label>
+          </div>
+        </details>
+
+        <button class="save-button" type="submit">記録する</button>
+      </form>
+
+      <section class="sync-panel" aria-label="同期">
+        <div>
+          <h2>PCへ同期</h2>
+          <p id="syncStatus">未設定</p>
+        </div>
+        <button id="syncButton" type="button">同期</button>
+        <details>
+          <summary>同期先を設定</summary>
+          <label>
+            <span>Google Apps Script URL</span>
+            <input id="syncUrlInput" type="url" inputmode="url" placeholder="https://script.google.com/macros/s/..." />
+          </label>
+          <button id="saveSyncUrlButton" type="button">保存</button>
+        </details>
+      </section>
+
+      <section class="insight" aria-label="カテゴリ別支出">
+        <div class="section-head">
+          <h2>よく使ったところ</h2>
+          <span id="monthLabel"></span>
+        </div>
+        <div class="bars" id="categoryBars"></div>
+      </section>
+
+      <section class="history" aria-label="履歴">
+        <div class="section-head">
+          <h2>最近の記録</h2>
+          <button id="clearButton" type="button">全削除</button>
+        </div>
+        <ul id="entryList"></ul>
+      </section>
+
+      <p class="analysis-link">
+        <a href="analyze.html">PCでCSVを分析する</a>
+      </p>
+    </main>
+
+    <script src="app.js"></script>
+    <script>
+      if ("serviceWorker" in navigator && location.protocol === "https:") {
+        navigator.serviceWorker.register("service-worker.js");
+      }
+    </script>
+  </body>
+</html>
