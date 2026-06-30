@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#1c1c1e" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title>FULL. — 食べたもの記録</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="view active" id="todayView" aria-labelledby="todayTab">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow" id="todayDate"></p>
+            <h1>FULL<span>.</span></h1>
+          </div>
+          <button class="icon-button" id="openSettings" aria-label="設定を開く">•••</button>
+        </header>
+
+        <section class="score-card" id="scoreCard">
+          <div class="score-head">
+            <p class="status-label">TODAY'S LOAD</p>
+            <p class="score"><strong id="todayScore">0</strong><span> / </span><span id="thresholdLabel">9</span></p>
+          </div>
+          <div class="meter" aria-label="今日の満腹ポイント">
+            <div class="meter-fill" id="meterFill"></div>
+          </div>
+          <p class="status-message" id="statusMessage">静かなスタート。</p>
+          <p class="status-sub" id="statusSub">今日も気楽に記録していこう。</p>
+        </section>
+
+        <section class="exercise-card" aria-labelledby="exerciseHeading">
+          <div class="section-heading exercise-heading">
+            <div>
+              <p class="eyebrow">MOVE LOG</p>
+              <h2 id="exerciseHeading">運動</h2>
+            </div>
+            <span id="exerciseTotal">0周</span>
+          </div>
+          <div class="course-toggle" role="group" aria-label="コース">
+            <button type="button" class="active" data-course="small">小回り</button>
+            <button type="button" data-course="large">大回り</button>
+          </div>
+          <div class="lap-controls">
+            <button type="button" id="lapMinus" aria-label="周数を1周減らす">−</button>
+            <output id="lapOutput" aria-live="polite"><strong>1</strong><span>周</span></output>
+            <button type="button" id="lapPlus" aria-label="周数を1周増やす">＋</button>
+            <button type="button" id="saveExercise" class="exercise-save">記録</button>
+          </div>
+          <div class="exercise-list" id="todayExerciseList"></div>
+        </section>
+
+        <section class="timeline-section">
+          <div class="section-heading">
+            <h2>今日のログ</h2>
+            <span id="entryCount">0件</span>
+          </div>
+          <div class="timeline" id="todayList"></div>
+        </section>
+      </section>
+
+      <section class="view" id="historyView" aria-labelledby="historyTab">
+        <header class="topbar history-topbar">
+          <div>
+            <p class="eyebrow">YOUR ARCHIVE</p>
+            <h1 class="page-title">履歴<span>.</span></h1>
+          </div>
+        </header>
+        <div class="history-summary">
+          <div><strong id="totalDays">0</strong><span>記録日</span></div>
+          <div><strong id="totalEntries">0</strong><span>食事</span></div>
+          <div><strong id="totalLaps">0</strong><span>運動（周）</span></div>
+          <div><strong id="overDays">0</strong><span>食べすぎ日</span></div>
+        </div>
+        <div id="historyList" class="history-list"></div>
+      </section>
+
+      <section class="view" id="settingsView" aria-labelledby="settingsTab">
+        <header class="topbar history-topbar">
+          <div>
+            <p class="eyebrow">MAKE IT YOURS</p>
+            <h1 class="page-title">設定<span>.</span></h1>
+          </div>
+        </header>
+        <div class="settings-card">
+          <label for="thresholdInput">
+            <span>食べすぎライン</span>
+            <small>この点数に達したら判定します</small>
+          </label>
+          <div class="stepper">
+            <button type="button" data-step="-1" aria-label="1点下げる">−</button>
+            <output id="thresholdOutput">9</output>
+            <button type="button" data-step="1" aria-label="1点上げる">＋</button>
+          </div>
+          <input id="thresholdInput" type="range" min="5" max="15" value="9" />
+        </div>
+        <div class="settings-card row-setting">
+          <div><span>1日の切り替え</span><small>夜更かし分は前日に記録</small></div>
+          <strong>午前4:00</strong>
+        </div>
+        <div class="settings-card sync-card">
+          <div class="sync-heading">
+            <div><span>スプレッドシート同期</span><small id="syncStatus">未設定・端末内に保存中</small></div>
+            <span class="sync-dot" id="syncDot" aria-hidden="true"></span>
+          </div>
+          <label for="syncUrl">Apps Script ウェブアプリURL</label>
+          <input id="syncUrl" type="url" inputmode="url" autocomplete="off" placeholder="https://script.google.com/macros/s/…/exec" />
+          <button type="button" id="saveSyncSettings">保存して同期</button>
+          <p>URLはこの端末だけに保存されます。未設定でも記録は消えません。</p>
+        </div>
+        <div class="settings-card about-card">
+          <span>判定について</span>
+          <p>これは健康や栄養の判定ではなく、自分なりの「食べた感」を見えるようにするための目安です。</p>
+        </div>
+      </section>
+
+      <section class="composer" id="composer">
+        <div class="composer-inner">
+          <label for="foodInput">食べたもの</label>
+          <textarea id="foodInput" rows="1" placeholder="おにぎりとラーメンとソフトクリーム"></textarea>
+          <div class="parsed-preview" id="parsedPreview" aria-live="polite"></div>
+          <p class="choose-label">食べた感を選ぶ</p>
+          <div class="weight-buttons">
+            <button type="button" data-score="1"><span>軽め</span><strong>+1</strong></button>
+            <button type="button" data-score="2"><span>普通</span><strong>+2</strong></button>
+            <button type="button" data-score="3" class="heavy"><span>がっつり</span><strong>+3</strong></button>
+            <button type="button" data-score="4" class="too-much"><span>多すぎ</span><strong>+4</strong></button>
+          </div>
+        </div>
+      </section>
+
+      <nav class="bottom-nav" aria-label="メインナビゲーション">
+        <button class="nav-item active" id="todayTab" data-view="todayView"><span class="nav-icon">●</span><span>今日</span></button>
+        <button class="nav-item" id="historyTab" data-view="historyView"><span class="nav-icon">▤</span><span>履歴</span></button>
+        <button class="add-button" id="focusInput" aria-label="食事を記録する">＋</button>
+        <button class="nav-item" id="settingsTab" data-view="settingsView"><span class="nav-icon">◆</span><span>設定</span></button>
+      </nav>
+    </main>
+
+    <dialog id="editDialog">
+      <form method="dialog" id="editForm">
+        <div class="dialog-handle"></div>
+        <h2>ログを編集</h2>
+        <label>食べたもの<textarea id="editFood" rows="2"></textarea></label>
+        <label>ポイント
+          <select id="editScore">
+            <option value="1">軽め（1点）</option><option value="2">普通（2点）</option>
+            <option value="3">がっつり（3点）</option><option value="4">多すぎ（4点）</option>
+          </select>
+        </label>
+        <div class="dialog-actions">
+          <button type="button" class="delete-button" id="deleteEntry">削除</button>
+          <button type="button" class="cancel-button" id="cancelEdit">戻る</button>
+          <button type="submit" class="save-button">保存</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite">記録しました</div>
+    <script src="./app.js"></script>
+  </body>
+</html>

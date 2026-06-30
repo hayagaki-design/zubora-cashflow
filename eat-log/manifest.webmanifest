@@ -1,0 +1,11 @@
+{
+  "name": "FULL. 食べたもの記録",
+  "short_name": "FULL.",
+  "description": "満腹ポイントで記録する、スマホ向け食事ログ",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#1c1c1e",
+  "theme_color": "#1c1c1e",
+  "lang": "ja",
+  "icons": [{ "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}
