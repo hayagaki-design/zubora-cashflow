@@ -1,8 +1,9 @@
 const storageKey = "zubora-cashflow-v1";
 const syncUrlKey = "zubora-cashflow-sync-url-v1";
 
-const categories = ["固定費", "外食", "ドリンク", "コンビニ", "買い物", "ガソリン"];
-let selectedCategory = "固定費";
+const expenseCategories = ["固定費", "外食", "ドリンク", "コンビニ", "買い物", "ガソリン"];
+const incomeCategories = ["給与", "特別収入"];
+let selectedCategory = expenseCategories[0];
 let entries = loadEntries();
 
 const entryForm = document.querySelector("#entryForm");
@@ -30,6 +31,12 @@ syncUrlInput.value = localStorage.getItem(syncUrlKey) || "";
 renderChips();
 render();
 renderSyncStatus();
+
+entryForm.addEventListener("change", (event) => {
+  if (event.target.name !== "type") return;
+  selectedCategory = categoriesForType(event.target.value)[0];
+  renderChips();
+});
 
 entryForm.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -138,7 +145,8 @@ syncButton.addEventListener("click", async () => {
 
 function renderChips() {
   categoryChips.innerHTML = "";
-  categories.forEach((category) => {
+  const type = new FormData(entryForm).get("type");
+  categoriesForType(type).forEach((category) => {
     const button = document.createElement("button");
     button.type = "button";
     button.className = `chip${category === selectedCategory ? " active" : ""}`;
@@ -171,7 +179,7 @@ function render() {
 
 function renderBars(monthEntries) {
   const expenseEntries = monthEntries.filter((entry) => entry.type === "expense");
-  const totals = categories
+  const totals = expenseCategories
     .map((category) => ({
       category,
       amount: sum(expenseEntries.filter((entry) => entry.category === category)),
@@ -197,6 +205,10 @@ function renderBars(monthEntries) {
     `;
     categoryBars.append(row);
   });
+}
+
+function categoriesForType(type) {
+  return type === "income" ? incomeCategories : expenseCategories;
 }
 
 function renderList() {

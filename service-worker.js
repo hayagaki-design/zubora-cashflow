@@ -1,4 +1,4 @@
-const cacheName = "zubora-cashflow-v2";
+const cacheName = "zubora-cashflow-v3";
 const assets = [
   "./",
   "./index.html",
